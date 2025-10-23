@@ -7,7 +7,6 @@ It's a thin layer on top of [ROM](https://rom-rb.org/) 5.
 
 [![Gem Version](https://badge.fury.io/rb/hanami-db.svg)](https://badge.fury.io/rb/db)
 [![CI](https://github.com/hanami/db/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/hanami/db/actions?query=workflow%3Aci+branch%3Amain)
-[![Depfu](https://badges.depfu.com/badges/7cd17419fba78b726be1353118fb01de/overview.svg)](https://depfu.com/github/hanami/controller?project=Bundler)
 
 ## Contact
 
@@ -20,8 +19,6 @@ It's a thin layer on top of [ROM](https://rom-rb.org/) 5.
 
 
 ## Installation
-
-__Hanami::DB__ supports Ruby (MRI) 3.1+
 
 Add this line to your Hanami application's Gemfile:
 
