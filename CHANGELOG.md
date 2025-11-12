@@ -16,7 +16,7 @@ The database layer for Hanami apps.
 
 ### Security
 
-## [2.3.0] - Unreleased
+## [2.3.0] - 2025-11-12
 
 ## [2.3.0.beta2] - 2025-10-17
 
