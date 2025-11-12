@@ -5,8 +5,8 @@ require_relative "lib/hanami/db/version"
 Gem::Specification.new do |spec|
   spec.name = "hanami-db"
   spec.version = Hanami::DB::VERSION
-  spec.authors = ["Hanami team"]
-  spec.email = ["admin@hanamirb.org"]
+  spec.authors = ["Hanakai team"]
+  spec.email = ["info@hanakai.org"]
   spec.summary = "The database layer for Hanami apps"
   spec.homepage = "https://hanamirb.org"
   spec.license = "MIT"
