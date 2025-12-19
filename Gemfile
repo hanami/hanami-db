@@ -16,5 +16,5 @@ gem "sqlite3"
 group :docs do
   gem "redcarpet", platforms: :mri
   gem "yard"
-  gem "yard-junk"
+  gem "ostruct" # for yard
 end
