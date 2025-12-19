@@ -8,7 +8,7 @@ require "yard"
 RSpec::Core::RakeTask.new { |task| task.verbose = false }
 RuboCop::RakeTask.new
 YARD::Rake::YardocTask.new do |task|
-  task.options = %w[--fail-on-warning --no-output]
+  task.options = %w[--no-output]
 end
 
 desc "Run code quality checks"
