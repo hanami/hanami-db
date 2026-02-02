@@ -1,30 +1,38 @@
 # frozen_string_literal: true
 
-require_relative "lib/hanami/db/version"
+# This file is synced from hanakai-rb/repo-sync. To update it, edit repo-sync.yml.
+
+lib = File.expand_path("lib", __dir__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+require "hanami/db/version"
 
 Gem::Specification.new do |spec|
-  spec.name = "hanami-db"
-  spec.version = Hanami::DB::VERSION
-  spec.authors = ["Hanakai team"]
-  spec.email = ["info@hanakai.org"]
-  spec.summary = "The database layer for Hanami apps"
-  spec.homepage = "https://hanamirb.org"
-  spec.license = "MIT"
+  spec.name          = "hanami-db"
+  spec.authors       = ["Hanakai team"]
+  spec.email         = ["info@hanakai.org"]
+  spec.license       = "MIT"
+  spec.version       = Hanami::DB::VERSION.dup
 
-  spec.metadata = {
-    "bug_tracker_uri" => "https://github.com/hanami/db/issues",
-    "changelog_uri" => "https://github.com/hanami/db/blob/main/CHANGELOG.md",
-    "documentation_uri" => "https://guides.hanamirb.org",
-    "funding_uri" => "https://github.com/sponsors/hanami",
-    "source_code_uri" => "https://github.com/hanami/db",
-    "rubygems_mfa_required" => "true"
-  }
+  spec.summary       = "The database layer for Hanami apps"
+  spec.description   = spec.summary
+  spec.homepage      = "https://hanamirb.org"
+  spec.files         = Dir["CHANGELOG.md", "LICENSE", "README.md", "hanami-db.gemspec", "lib/**/*"]
+  spec.bindir        = "exe"
+  spec.executables   = Dir["exe/*"].map { |f| File.basename(f) }
+  spec.require_paths = ["lib"]
+
+  spec.extra_rdoc_files = ["README.md", "CHANGELOG.md", "LICENSE"]
+
+  spec.metadata["allowed_push_host"] = "https://rubygems.org"
+  spec.metadata["changelog_uri"]     = "https://github.com/hanami/hanami-db/blob/main/CHANGELOG.md"
+  spec.metadata["source_code_uri"]   = "https://github.com/hanami/hanami-db"
+  spec.metadata["bug_tracker_uri"]   = "https://github.com/hanami/hanami-db/issues"
+  spec.metadata["funding_uri"]       = "https://github.com/sponsors/hanami"
 
   spec.required_ruby_version = ">= 3.2"
-  spec.add_dependency "rom", "~> 5.4", ">= 5.4.1"
-  spec.add_dependency "rom-sql", "~> 3.7"
-  spec.add_dependency "zeitwerk", "~> 2.6"
 
-  spec.extra_rdoc_files = Dir["README*", "LICENSE*"]
-  spec.files = Dir["*.gemspec", "lib/**/*"]
+  spec.add_runtime_dependency "rom", "~> 5.4", ">= 5.4.1"
+  spec.add_runtime_dependency "rom-sql", "~> 3.7"
+  spec.add_runtime_dependency "zeitwerk", "~> 2.6"
 end
+
