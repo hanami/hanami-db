@@ -1,0 +1,16 @@
+name:
+  gem: hanami-db
+  constant: Hanami::DB
+  title: Hanami DB
+github_org: hanami
+ci:
+  jruby: false
+gemspec:
+  authors: ["Hanakai team"]
+  email: ["info@hanakai.org"]
+  summary: "The database layer for Hanami apps"
+  homepage: "https://hanamirb.org"
+  runtime_dependencies:
+    - ["rom", "~> 5.4", ">= 5.4.1"]
+    - ["rom-sql", "~> 3.7"]
+    - ["zeitwerk", "~> 2.6"]

@@ -2,14 +2,11 @@
 
 source "https://rubygems.org"
 
+eval_gemfile "Gemfile.devtools"
+
 gemspec
 
 gem "hanami-devtools", github: "hanami/devtools", branch: "main"
-
-group :development do
-  gem "rake"
-  gem "rubocop"
-end
 
 gem "sqlite3"
 

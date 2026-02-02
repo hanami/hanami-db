@@ -13,11 +13,11 @@ RSpec.describe Hanami::DB::Relation do
   before do
     module Test
       class User < Hanami::DB::Relation
-        schema(:users) {} # rubocop:disable Lint/EmptyBlock
+        schema(:users) {}
       end
 
       class APITokens < Hanami::DB::Relation[:memory]
-        schema(:api_tokens) {} # rubocop:disable Lint/EmptyBlock
+        schema(:api_tokens) {}
       end
     end
 

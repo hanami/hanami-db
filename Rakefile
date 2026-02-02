@@ -3,15 +3,15 @@
 require "bundler/gem_tasks"
 require "rspec/core/rake_task"
 require "rubocop/rake_task"
-require "yard"
 
-RSpec::Core::RakeTask.new { |task| task.verbose = false }
-RuboCop::RakeTask.new
-YARD::Rake::YardocTask.new do |task|
-  task.options = %w[--no-output]
-end
+RSpec::Core::RakeTask.new(:spec)
 
-desc "Run code quality checks"
-task lint: %i[rubocop yard]
+desc "Run all tests"
+task test: :spec
 
-task default: %i[lint spec]
+RuboCop::RakeTask.new(:rubocop)
+
+desc "Run all linters"
+task lint: :rubocop
+
+task default: %i[lint test]
