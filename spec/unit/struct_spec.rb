@@ -2,7 +2,7 @@
 
 RSpec.describe Hanami::DB::Struct do
   let!(:config) do
-    ROM::Configuration.new(:sql, "sqlite::memory") do |conf|
+    ROM::Configuration.new(:sql, sqlite_memory_database_url) do |conf|
       conf.default.create_table(:users) do
         primary_key :id
         column :first_name, String
