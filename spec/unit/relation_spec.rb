@@ -3,7 +3,7 @@
 RSpec.describe Hanami::DB::Relation do
   let :adapters do
     {
-      default: [:sql, "sqlite::memory"],
+      default: [:sql, sqlite_memory_database_url],
       alternate: [:memory, "memory://test"]
     }
   end

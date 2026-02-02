@@ -3,8 +3,6 @@ name:
   constant: Hanami::DB
   title: Hanami DB
 github_org: hanami
-ci:
-  jruby: false
 gemspec:
   authors: ["Hanakai team"]
   email: ["info@hanakai.org"]

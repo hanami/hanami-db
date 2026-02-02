@@ -8,7 +8,8 @@ gemspec
 
 gem "hanami-devtools", github: "hanami/devtools", branch: "main"
 
-gem "sqlite3"
+gem "sqlite3", platform: :mri
+gem "jdbc-sqlite3", platform: :jruby
 
 group :docs do
   gem "redcarpet", platforms: :mri
