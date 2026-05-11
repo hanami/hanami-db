@@ -9,6 +9,13 @@ and this project adheres to [Break Versioning](https://www.taoensso.com/break-ve
 
 ### Added
 
+- `Hanami::DB::SQLite::Pragmas` — a value class holding a set of SQLite
+  pragmas with sensible defaults, user overrides, and validation against
+  `PRAGMA pragma_list`. Exposes `#connect_sqls`, an array of `PRAGMA`
+  statements suitable for Sequel's per-connection `connect_sqls` option.
+  `UnknownPragmaError` is raised when an override names a pragma the
+  linked SQLite doesn't recognise.
+
 ### Changed
 
 ### Deprecated
