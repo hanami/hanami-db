@@ -9,6 +9,14 @@ module Test
         "sqlite:file::memory:?cache=private"
       end
     end
+
+    def sqlite_file_database_url(path)
+      if RUBY_PLATFORM == "java"
+        "jdbc:sqlite:#{path}"
+      else
+        "sqlite://#{path}"
+      end
+    end
   end
 end
 
