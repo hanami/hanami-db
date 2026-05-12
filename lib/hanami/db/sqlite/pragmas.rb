@@ -24,9 +24,8 @@ module Hanami
         # on first access. Reflects whatever SQLite the runtime has linked,
         # so newer pragmas appear automatically without a gem upgrade.
         # Memoized at the class level; the in-memory handle is opened at
-        # most once per class load, and not at all if `self.names` is
-        # never called. The mutex guards concurrent first access (e.g.
-        # parallel connection warmup at boot).
+        # most once per class load. The mutex guards concurrent first
+        # access (e.g. parallel connection warmup at boot).
         def self.names
           @names || NAMES_MUTEX.synchronize do
             @names ||= begin
@@ -38,10 +37,10 @@ module Hanami
           end
         end
 
-        def initialize(overrides: {}, clear_defaults: false, validate: true)
+        def initialize(overrides: {}, clear_defaults: false)
           base = clear_defaults ? {} : DEFAULTS
           @resolved = base.merge(overrides.transform_keys(&:to_sym)).freeze
-          validate_names! if validate
+          validate_names!
         end
 
         def to_h

@@ -14,10 +14,6 @@ RSpec.describe Hanami::DB::SQLite::UnknownPragmaError do
     expect(subject.message).to include("wibble")
   end
 
-  it "mentions the validation opt-out" do
-    expect(subject.message).to include("validate: false")
-  end
-
   it "exposes the unknown pragma names" do
     expect(subject.unknown).to eq([:frobnicate, :wibble])
   end

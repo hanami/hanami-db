@@ -14,10 +14,7 @@ module Hanami
         private
 
         def build_message(unknown)
-          "Unknown SQLite pragma(s): #{unknown.join(", ")}. " \
-            "If you have confirmed this pragma is supported by your SQLite build, " \
-            "construct Hanami::DB::SQLite::Pragmas with `validate: false` to bypass " \
-            "name validation."
+          "Unknown SQLite pragma(s): #{unknown.join(", ")}."
         end
       end
     end

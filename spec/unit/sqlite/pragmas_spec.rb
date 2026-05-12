@@ -112,17 +112,6 @@ RSpec.describe Hanami::DB::SQLite::Pragmas do
       end
     end
 
-    context "with validate: false and an unknown override" do
-      let(:args) { {overrides: {frobnicate: 1}, validate: false} }
-
-      it "does not raise" do
-        expect { subject }.not_to raise_error
-      end
-
-      it "still includes the unknown pragma in the resolved set" do
-        expect(subject.to_h.fetch(:frobnicate)).to eq(1)
-      end
-    end
   end
 
   describe ".names" do
@@ -137,14 +126,6 @@ RSpec.describe Hanami::DB::SQLite::Pragmas do
       3.times { described_class.new(clear_defaults: true, overrides: {foreign_keys: 1}) }
 
       expect(SQLite3::Database).to have_received(:new).once
-    end
-
-    it "does not open a connection when no instance ever validates" do
-      allow(SQLite3::Database).to receive(:new)
-
-      described_class.new(overrides: {frobnicate: 1}, validate: false)
-
-      expect(SQLite3::Database).not_to have_received(:new)
     end
   end
 
