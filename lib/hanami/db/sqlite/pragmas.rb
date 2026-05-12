@@ -16,7 +16,7 @@ module Hanami
         NAMES_MUTEX = Mutex.new
         private_constant :NAMES_MUTEX
 
-        MEMORY_URL = RUBY_PLATFORM == "java" ? "jdbc:sqlite::memory:" : "sqlite::memory:"
+        MEMORY_URL = RUBY_ENGINE == "jruby" ? "jdbc:sqlite::memory:" : "sqlite::memory:"
         private_constant :MEMORY_URL
 
         # The authoritative set of pragma names SQLite recognises, queried
