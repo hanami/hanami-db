@@ -3,10 +3,18 @@
 module Test
   module Helpers
     def sqlite_memory_database_url
-      if RUBY_PLATFORM == "java"
+      if RUBY_ENGINE == "jruby"
         "jdbc:sqlite:file::memory:?cache=private"
       else
         "sqlite:file::memory:?cache=private"
+      end
+    end
+
+    def sqlite_file_database_url(path)
+      if RUBY_ENGINE == "jruby"
+        "jdbc:sqlite:#{path}"
+      else
+        "sqlite://#{path}"
       end
     end
   end
