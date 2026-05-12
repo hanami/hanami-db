@@ -17,7 +17,7 @@ RSpec.describe Hanami::DB::SQLite::Pragmas do
         synchronous: :normal,
         mmap_size: 128 * 1024 * 1024,
         journal_size_limit: 64 * 1024 * 1024,
-        cache_size: 2_000,
+        cache_size: 2_000
       )
     end
   end
@@ -81,14 +81,14 @@ RSpec.describe Hanami::DB::SQLite::Pragmas do
       it "raises UnknownPragmaError" do
         expect { subject }.to raise_error(
           Hanami::DB::SQLite::UnknownPragmaError,
-          /frobnicate/,
+          /frobnicate/
         )
       end
 
       it "lists every unknown name when multiple are given" do
         multi_args = {overrides: {frobnicate: 1, wibble: 2}}
         expect { described_class.new(**multi_args) }.to raise_error(
-          Hanami::DB::SQLite::UnknownPragmaError,
+          Hanami::DB::SQLite::UnknownPragmaError
         ) { |e| expect(e.unknown).to contain_exactly(:frobnicate, :wibble) }
       end
     end
@@ -107,11 +107,10 @@ RSpec.describe Hanami::DB::SQLite::Pragmas do
       it "still raises UnknownPragmaError" do
         expect { subject }.to raise_error(
           Hanami::DB::SQLite::UnknownPragmaError,
-          /frobnicate/,
+          /frobnicate/
         )
       end
     end
-
   end
 
   describe ".names" do
@@ -134,7 +133,7 @@ RSpec.describe Hanami::DB::SQLite::Pragmas do
 
     it "returns one `PRAGMA name = value` statement per resolved pragma" do
       expect(subject.connect_sqls).to contain_exactly(
-        *subject.to_h.map { |name, value| "PRAGMA #{name} = #{value}" },
+        *subject.to_h.map { |name, value| "PRAGMA #{name} = #{value}" }
       )
     end
 

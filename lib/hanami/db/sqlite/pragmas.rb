@@ -12,7 +12,7 @@ module Hanami
           synchronous: :normal,
           mmap_size: 128 * 1024 * 1024,
           journal_size_limit: 64 * 1024 * 1024,
-          cache_size: 2_000,
+          cache_size: 2_000
         }.freeze
 
         NAMES_MUTEX = Mutex.new
