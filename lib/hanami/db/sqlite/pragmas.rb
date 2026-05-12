@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "sqlite3"
-
 module Hanami
   module DB
     module SQLite
@@ -18,6 +16,9 @@ module Hanami
         NAMES_MUTEX = Mutex.new
         private_constant :NAMES_MUTEX
 
+        MEMORY_URL = RUBY_PLATFORM == "java" ? "jdbc:sqlite::memory:" : "sqlite::memory:"
+        private_constant :MEMORY_URL
+
         # The authoritative set of pragma names SQLite recognises, queried
         # via `PRAGMA pragma_list` (here through its table-valued form,
         # `pragma_pragma_list`) against a transient in-memory connection
@@ -29,10 +30,10 @@ module Hanami
         def self.names
           @names || NAMES_MUTEX.synchronize do
             @names ||= begin
-              db = ::SQLite3::Database.new(":memory:")
-              db.execute("SELECT name FROM pragma_pragma_list").flatten.map(&:to_sym).to_set.freeze
+              db = Sequel.connect(MEMORY_URL)
+              db.fetch("SELECT name FROM pragma_pragma_list").map { |row| row[:name].to_sym }.to_set.freeze
             ensure
-              db&.close
+              db&.disconnect
             end
           end
         end
