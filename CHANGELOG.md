@@ -19,7 +19,15 @@ and this project adheres to [Break Versioning](https://www.taoensso.com/break-ve
 
 ### Security
 
-[Unreleased]: https://github.com/hanami/hanami-db/compare/v2.3.0...main
+[Unreleased]: https://github.com/hanami/hanami-db/compare/v3.0.0.rc1...main
+
+## [3.0.0.rc1]
+
+### Changed
+
+- Require Ruby 3.3 or newer.
+
+[3.0.0.rc1]: https://github.com/hanami/hanami-db/compare/v2.3.0...3.0.0.rc1
 
 ## [2.3.0] - 2025-11-12
 
