@@ -1,0 +1,3 @@
+POSTGRES_BASE_URL: postgres://postgres:password@localhost:5432/hanami_db_test
+# Enable ObjectSpace for tests
+JRUBY_OPTS: "-X+O"
