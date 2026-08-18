@@ -3,9 +3,10 @@
 module Hanami
   module DB
     module SQLite
+      # SQLite pragmas applied to every new connection, with sensible defaults.
       class Pragmas
+        # `foreign_keys` is omitted: Sequel's adapter already enables it.
         DEFAULTS = {
-          foreign_keys: true,
           journal_mode: :wal,
           synchronous: :normal,
           mmap_size: 128 * 1024 * 1024,
@@ -45,6 +46,8 @@ module Hanami
           @resolved
         end
 
+        # Runs after the adapter's own `connection_pragmas`, so an override
+        # naming a pragma Sequel also sets will win.
         def connect_sqls
           @resolved.map { |name, value| "PRAGMA #{name} = #{value}" }
         end

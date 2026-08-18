@@ -12,7 +12,6 @@ RSpec.describe Hanami::DB::SQLite::Pragmas do
 
     it "is the chosen set of pragmas" do
       expect(described_class::DEFAULTS).to eq(
-        foreign_keys: true,
         journal_mode: :wal,
         synchronous: :normal,
         mmap_size: 128 * 1024 * 1024,
@@ -142,7 +141,7 @@ RSpec.describe Hanami::DB::SQLite::Pragmas do
     end
 
     it "preserves the resolved insertion order" do
-      expect(subject.connect_sqls.first).to eq("PRAGMA foreign_keys = true")
+      expect(subject.connect_sqls.first).to eq("PRAGMA journal_mode = wal")
     end
   end
 end
