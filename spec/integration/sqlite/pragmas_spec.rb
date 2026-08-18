@@ -22,10 +22,6 @@ RSpec.describe "SQLite Pragmas integration" do
     db.fetch("PRAGMA #{name}").first&.fetch(name)
   end
 
-  it "sets foreign_keys" do
-    expect(pragma(:foreign_keys).to_i).to eq(1)
-  end
-
   it "sets journal_mode to wal" do
     expect(pragma(:journal_mode)).to eq("wal")
   end
@@ -44,5 +40,19 @@ RSpec.describe "SQLite Pragmas integration" do
     db.pool.hold { |_conn| }
 
     expect(pragma(:journal_mode)).to eq("wal")
+  end
+
+  # Sequel's adapter enables foreign keys itself, which is why DEFAULTS
+  # no longer carries the pragma.
+  it "relies on Sequel to enable foreign keys" do
+    expect(pragma(:foreign_keys).to_i).to eq(1)
+  end
+
+  context "with an override naming a pragma Sequel also sets" do
+    let(:overrides) { {foreign_keys: 0} }
+
+    it "wins, because connect_sqls runs after the adapter's own pragmas" do
+      expect(pragma(:foreign_keys).to_i).to eq(0)
+    end
   end
 end
