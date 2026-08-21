@@ -17,6 +17,21 @@ and this project adheres to [Break Versioning](https://www.taoensso.com/break-ve
 
 ### Fixed
 
+- `Hanami::DB::Testing.database_url` now transforms `jdbc:` database URLs. Previously it returned them
+  unchanged, so with `HANAMI_ENV=test` the test database URL still pointed at the **development**
+  database, and running the test suite truncated or migrated development data. This affected JRuby
+  applications, which are the only ones that must use `jdbc:` URLs.
+
+  The `jdbc:postgresql:`, `jdbc:mysql:` and `jdbc:sqlite:` subprotocols are transformed, in both the
+  `jdbc:sqlite://db/app.db` and single-colon `jdbc:sqlite:db/app.db` forms, including SQLite's
+  Windows drive-letter (`jdbc:sqlite:C:/db/app.db`) and `file:` URI filename
+  (`jdbc:sqlite:file:db/app.db?mode=ro`) paths. Other subprotocols — `jdbc:sqlserver:`, `jdbc:h2:`,
+  `jdbc:derby:` and the rest — name their databases in ways this transformation does not understand,
+  and continue to be returned untouched. In-memory SQLite databases (`sqlite::memory:`,
+  `jdbc:sqlite:file::memory:?cache=private`, `jdbc:sqlite:file:app?mode=memory`) are also left alone.
+- `Hanami::DB::Testing.database_url` now transforms the single-colon `sqlite:db/development.sqlite3`
+  form on CRuby too, not only behind a `jdbc:` prefix. Previously it was returned unchanged.
+
 ### Security
 
 [Unreleased]: https://github.com/hanami/hanami-db/compare/v3.0.0...main
