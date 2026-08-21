@@ -28,8 +28,8 @@ module Hanami
       #
       # @api private
       # @since 3.0.1
-      JDBC_SUBPROTOCOLS = ["postgresql:", "mysql:", "sqlite:"].freeze
-      private_constant :JDBC_SUBPROTOCOLS
+      JDBC_SUPPORTED_SUBPROTOCOLS = ["postgresql:", "mysql:", "sqlite:"].freeze
+      private_constant :JDBC_SUPPORTED_SUBPROTOCOLS
 
       # Prefix of a SQLite URI filename, e.g. "file:db/app.sqlite3?mode=ro"
       #
@@ -51,14 +51,6 @@ module Hanami
       # @since 3.0.1
       SQLITE_MEMORY_QUERY = "mode=memory"
       private_constant :SQLITE_MEMORY_QUERY
-
-      # Matches a SQLite filename, optionally led by a Windows drive letter.
-      # Anchored, since a stray colon means an in-memory database.
-      #
-      # @api private
-      # @since 3.0.1
-      SQLITE_FILENAME_MATCHER = /\A([A-Za-z]:)?[^:]+\z/
-      private_constant :SQLITE_FILENAME_MATCHER
 
       class << self
         # @api private
@@ -90,7 +82,7 @@ module Hanami
         def jdbc_database_url(url)
           rest = url.delete_prefix(JDBC_PREFIX)
 
-          return url unless rest.start_with?(*JDBC_SUBPROTOCOLS)
+          return url unless rest.start_with?(*JDBC_SUPPORTED_SUBPROTOCOLS)
 
           JDBC_PREFIX + transform(URI(rest))
         rescue URI::Error
@@ -180,7 +172,6 @@ module Hanami
 
           return opaque if filename.match?(SQLITE_MEMORY_MATCHER)
           return opaque if query.include?(SQLITE_MEMORY_QUERY)
-          return opaque unless filename.match?(SQLITE_FILENAME_MATCHER)
 
           prefix + database_filename(filename) + separator + query
         end
