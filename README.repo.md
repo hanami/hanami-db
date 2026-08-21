@@ -15,16 +15,18 @@ $ bundle
 ## Development
 
 Most of the test suite runs against SQLite and needs no setup. The specs that exercise Postgres and
-MySQL need those servers running, which `docker compose` provides:
+MySQL need those servers running, which `docker compose` provides. This needs
+[Docker](https://docs.docker.com/get-started/get-docker/) installed: Docker Desktop on macOS and
+Windows, or Docker Engine with the Compose plugin on Linux.
 
 ```shell
 $ docker compose up -d
 $ bundle exec rspec
 ```
 
-Postgres listens on 5433 and MySQL on 3307 locally, so they don't collide with any servers you
-already have installed. CI uses the default ports; override with `POSTGRES_BASE_URL` if your setup
-differs.
+Locally, Postgres listens on 5433 and MySQL on 3307, so they don't collide with any servers you
+already have installed. CI runs Postgres on its default 5432 and MySQL on 3307. Override
+`POSTGRES_BASE_URL` if your setup differs.
 
 ## Contributing
 
