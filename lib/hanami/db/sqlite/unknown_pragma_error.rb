@@ -8,13 +8,7 @@ module Hanami
 
         def initialize(unknown)
           @unknown = unknown.dup.freeze
-          super(build_message(@unknown))
-        end
-
-        private
-
-        def build_message(unknown)
-          "Unknown SQLite pragma(s): #{unknown.join(", ")}."
+          super("Unknown SQLite pragma(s): #{unknown.join(", ")}.")
         end
       end
     end
