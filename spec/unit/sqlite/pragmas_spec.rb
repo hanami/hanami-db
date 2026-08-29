@@ -113,13 +113,13 @@ RSpec.describe Hanami::DB::SQLite::Pragmas do
   end
 
   describe ".names" do
-    let(:fake_db) { instance_double(Sequel::Database, fetch: [{name: "foreign_keys"}], disconnect: nil) }
+    let(:fake_db) { instance_double(Sequel::Database, fetch: [{name: "foreign_keys"}]) }
 
     before { described_class.instance_variable_set(:@names, nil) }
     after { described_class.instance_variable_set(:@names, nil) }
 
     it "opens the :memory: connection only once across many validations" do
-      allow(Sequel).to receive(:connect).and_return(fake_db)
+      allow(Sequel).to receive(:connect).and_yield(fake_db)
 
       3.times { described_class.new(clear_defaults: true, overrides: {foreign_keys: 1}) }
 

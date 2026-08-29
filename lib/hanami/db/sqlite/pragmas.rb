@@ -24,14 +24,15 @@ module Hanami
         # so newer pragmas appear automatically without a gem upgrade.
         # Memoized at the class level; the in-memory handle is opened at
         # most once per class load. The mutex guards concurrent first
-        # access (e.g. parallel connection warmup at boot).
+        # access (e.g. parallel connection warmup at boot). The block form
+        # of `Sequel.connect` is required: it disconnects *and* removes the
+        # handle from `Sequel::DATABASES`, so we leave no stray database
+        # registered for tools that inspect that list (DatabaseCleaner
+        # refuses to run when it sees more than one).
         def self.names
           @names || NAMES_MUTEX.synchronize do
-            @names ||= begin
-              db = Sequel.connect(MEMORY_URL)
+            @names ||= Sequel.connect(MEMORY_URL) do |db|
               db.fetch("SELECT name FROM pragma_pragma_list").map { |row| row[:name].to_sym }.to_set.freeze
-            ensure
-              db&.disconnect
             end
           end
         end
