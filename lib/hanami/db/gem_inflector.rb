@@ -6,6 +6,7 @@ module Hanami
     class GemInflector < Zeitwerk::GemInflector
       def camelize(basename, _abspath)
         return "DB" if basename == "db"
+        return "SQLite" if basename == "sqlite"
 
         super
       end
