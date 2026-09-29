@@ -20,8 +20,9 @@ module Hanami
         # The authoritative set of pragma names SQLite recognises, queried
         # via `PRAGMA pragma_list` (here through its table-valued form,
         # `pragma_pragma_list`) against a transient in-memory connection
-        # on first access. Reflects whatever SQLite the runtime has linked,
-        # so newer pragmas appear automatically without a gem upgrade.
+        # on first access. Requires SQLite 3.30+, where `pragma_list` is
+        # compiled in by default. Reflects whatever SQLite the runtime has
+        # linked, so newer pragmas appear automatically without a gem upgrade.
         # Memoized at the class level; the in-memory handle is opened at
         # most once per class load. The mutex guards concurrent first
         # access (e.g. parallel connection warmup at boot). The block form
