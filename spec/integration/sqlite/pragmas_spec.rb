@@ -44,9 +44,61 @@ RSpec.describe Hanami::DB::SQLite::Pragmas do
         expect(pragma(:journal_mode)).to eq("wal")
       end
 
-      # Foreign keys are enabled by Sequel's adapter, not by DEFAULTS.
-      it "relies on Sequel to enable foreign keys" do
-        expect(pragma(:foreign_keys).to_i).to eq(1)
+      # The full set of settings a connection ends up with, whether they
+      # come from Pragmas::DEFAULTS or from Sequel's SQLite adapter.
+      # Sequel's are pinned too, so a Sequel upgrade that changes one
+      # fails here.
+      context "with no overrides" do
+        let(:overrides) { {} }
+
+        it "sets journal_mode to wal" do
+          expect(pragma(:journal_mode)).to eq("wal")
+        end
+
+        it "sets synchronous to normal" do
+          expect(pragma(:synchronous).to_i).to eq(1) # normal = 1
+        end
+
+        it "sets mmap_size to 128MiB" do
+          expect(pragma(:mmap_size).to_i).to eq(128 * 1024 * 1024)
+        end
+
+        it "sets journal_size_limit to 64MiB" do
+          expect(pragma(:journal_size_limit).to_i).to eq(64 * 1024 * 1024)
+        end
+
+        it "sets cache_size to 2000 pages" do
+          expect(pragma(:cache_size).to_i).to eq(2_000)
+        end
+
+        it "relies on Sequel to enable foreign keys" do
+          expect(pragma(:foreign_keys).to_i).to eq(1)
+        end
+
+        # case_sensitive_like is write-only, so check its effect instead.
+        it "relies on Sequel to make LIKE case-sensitive" do
+          expect(db.get(Sequel.lit("'a' LIKE 'A'")).to_i).to eq(0)
+        end
+
+        # Sequel's MRI adapter sets 5000ms; its JDBC adapter sets nothing,
+        # leaving sqlite-jdbc's own default.
+        it "relies on the adapter for a busy timeout" do
+          timeout = db.fetch("PRAGMA busy_timeout").first.fetch(:timeout)
+
+          expect(timeout.to_i).to eq(RUBY_ENGINE == "jruby" ? 3_000 : 5_000)
+        end
+
+        it "relies on Sequel to store booleans as integers and read them back as booleans" do
+          db.create_table(:flags) do
+            primary_key :id
+            TrueClass :flag
+          end
+          db[:flags].insert(flag: true)
+          db[:flags].insert(flag: false)
+
+          expect(db[:flags].order(:id).select_map(:flag)).to eq([true, false])
+          expect(db.fetch("SELECT typeof(flag) AS type FROM flags").map(:type)).to all(eq("integer"))
+        end
       end
 
       context "with an override naming a pragma Sequel also sets" do
