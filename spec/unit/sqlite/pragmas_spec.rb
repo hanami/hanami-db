@@ -60,6 +60,22 @@ RSpec.describe Hanami::DB::SQLite::Pragmas do
       end
     end
 
+    context "with readonly: true" do
+      let(:args) { {readonly: true} }
+
+      it "drops the defaults that write to the database file" do
+        expect(subject.to_h).to eq(described_class::DEFAULTS.except(:journal_mode))
+      end
+    end
+
+    context "with readonly: true and a write pragma override" do
+      let(:args) { {readonly: true, overrides: {journal_mode: :delete}} }
+
+      it "keeps the override" do
+        expect(subject.to_h.fetch(:journal_mode)).to eq(:delete)
+      end
+    end
+
     context "with string-keyed overrides" do
       let(:args) { {overrides: {"synchronous" => "full"}} }
 
