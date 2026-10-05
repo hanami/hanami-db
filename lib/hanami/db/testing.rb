@@ -18,13 +18,6 @@ module Hanami
       DATABASE_NAME_MATCHER = /_dev(elopment)?$/
       private_constant :DATABASE_NAME_MATCHER
 
-      # JDBC subprotocols whose URLs this transformation understands
-      #
-      # @api private
-      # @since 3.0.1
-      JDBC_SUPPORTED_SUBPROTOCOLS = ["postgresql:", "mysql:", "sqlite:"].freeze
-      private_constant :JDBC_SUPPORTED_SUBPROTOCOLS
-
       # Prefix of a SQLite URI filename, e.g. "file:db/app.sqlite3?mode=ro"
       #
       # @api private
@@ -74,11 +67,9 @@ module Hanami
         # @api private
         # @since 3.0.1
         def jdbc_database_url(url)
-          rest = url.delete_prefix(DatabaseURL::JDBC_PREFIX)
+          return url unless DatabaseURL.adapter(url)
 
-          return url unless rest.start_with?(*JDBC_SUPPORTED_SUBPROTOCOLS)
-
-          DatabaseURL::JDBC_PREFIX + transform(URI(rest))
+          DatabaseURL::JDBC_PREFIX + transform(DatabaseURL.uri(url))
         rescue URI::Error
           url
         end

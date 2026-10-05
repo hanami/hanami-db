@@ -58,6 +58,11 @@ RSpec.describe Hanami::DB::DatabaseURL do
       expect(described_class.adapter("jdbc:sqlserver://localhost;databaseName=app")).to be_nil
     end
 
+    it "is nil for JDBC subprotocols that JDBC drivers do not accept" do
+      expect(described_class.adapter("jdbc:postgres://localhost/app")).to be_nil
+      expect(described_class.adapter("jdbc:mysql2://localhost/app")).to be_nil
+    end
+
     it "is nil for unparseable URLs" do
       expect(described_class.adapter("not a url")).to be_nil
     end

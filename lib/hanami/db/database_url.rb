@@ -53,6 +53,13 @@ module Hanami
         "mysql" => "jdbc-mysql"
       }.freeze
 
+      # Adapters for each JDBC subprotocol. JDBC drivers accept only these subprotocols, e.g.
+      # "postgresql" but not "postgres".
+      #
+      # @api private
+      # @since 3.1.0
+      JDBC_ADAPTERS = ADAPTERS.slice(*JDBC_GEMS.keys).freeze
+
       module_function
 
       # Returns true if the URL is a JDBC URL.
@@ -94,7 +101,8 @@ module Hanami
       # @api private
       # @since 3.1.0
       def adapter(url)
-        ADAPTERS[uri(url).scheme]
+        adapters = jdbc?(url) ? JDBC_ADAPTERS : ADAPTERS
+        adapters[uri(url).scheme]
       rescue URI::Error
         nil
       end
