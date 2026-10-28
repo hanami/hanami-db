@@ -7,6 +7,7 @@ module Hanami
       def camelize(basename, _abspath)
         return "DB" if basename == "db"
         return "SQLite" if basename == "sqlite"
+        return "DatabaseURL" if basename == "database_url"
 
         super
       end

@@ -9,6 +9,11 @@ and this project adheres to [Break Versioning](https://www.taoensso.com/break-ve
 
 ### Added
 
+- `Hanami::DB::DatabaseURL`: helpers for inspecting database URLs, including
+  JRuby's JDBC URLs, shared by hanami and hanami-cli. Provides `.jdbc?`,
+  `.uri` (the URL parsed with any `jdbc:` prefix removed), `.adapter`
+  (`:sqlite`, `:postgres` or `:mysql`) and `.gem_name` (the gem required to
+  connect, e.g. `"pg"` or `"jdbc-postgres"`).
 - `Hanami::DB::SQLite::Pragmas`: a value class holding a set of SQLite
   pragmas with sensible defaults, user overrides, and validation against
   `PRAGMA pragma_list`. Exposes `#connect_sqls`, an array of `PRAGMA`
