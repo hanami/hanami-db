@@ -2,6 +2,7 @@
 
 require "pathname"
 require "uri"
+require_relative "database_url"
 
 module Hanami
   module DB
@@ -16,20 +17,6 @@ module Hanami
       # @since 2.2.0
       DATABASE_NAME_MATCHER = /_dev(elopment)?$/
       private_constant :DATABASE_NAME_MATCHER
-
-      # Prefix of the JDBC URLs that JRuby applications must use
-      #
-      # @api private
-      # @since 3.0.1
-      JDBC_PREFIX = "jdbc:"
-      private_constant :JDBC_PREFIX
-
-      # JDBC subprotocols whose URLs this transformation understands
-      #
-      # @api private
-      # @since 3.0.1
-      JDBC_SUPPORTED_SUBPROTOCOLS = ["postgresql:", "mysql:", "sqlite:"].freeze
-      private_constant :JDBC_SUPPORTED_SUBPROTOCOLS
 
       # Prefix of a SQLite URI filename, e.g. "file:db/app.sqlite3?mode=ro"
       #
@@ -58,7 +45,7 @@ module Hanami
         def database_url(url)
           url = url.to_s
 
-          return jdbc_database_url(url) if url.start_with?(JDBC_PREFIX)
+          return jdbc_database_url(url) if DatabaseURL.jdbc?(url)
 
           # URI#dup does not duplicate internal instance
           # variables, making mutation dangerous.
@@ -80,11 +67,9 @@ module Hanami
         # @api private
         # @since 3.0.1
         def jdbc_database_url(url)
-          rest = url.delete_prefix(JDBC_PREFIX)
+          return url unless DatabaseURL.adapter(url)
 
-          return url unless rest.start_with?(*JDBC_SUPPORTED_SUBPROTOCOLS)
-
-          JDBC_PREFIX + transform(URI(rest))
+          DatabaseURL::JDBC_PREFIX + transform(DatabaseURL.uri(url))
         rescue URI::Error
           url
         end
