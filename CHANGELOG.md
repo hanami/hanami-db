@@ -18,6 +18,9 @@ and this project adheres to [Break Versioning](https://www.taoensso.com/break-ve
   defaults, since Sequel's SQLite adapter already enables it on every
   connection; it can still be set as an override.
   Requires SQLite 3.30+, where `pragma_list` is available by default.
+- `Hanami::DB::InvalidDatabaseURLError`: raised for database URLs that
+  cannot be parsed. Its message includes only the URL's scheme, since the
+  URL may contain credentials.
 
 ### Changed
 

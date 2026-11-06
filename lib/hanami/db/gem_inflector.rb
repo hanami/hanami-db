@@ -8,6 +8,7 @@ module Hanami
         return "DB" if basename == "db"
         return "SQLite" if basename == "sqlite"
         return "DatabaseURL" if basename == "database_url"
+        return "InvalidDatabaseURLError" if basename == "invalid_database_url_error"
 
         super
       end
