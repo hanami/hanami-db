@@ -16,7 +16,9 @@ and this project adheres to [Break Versioning](https://www.taoensso.com/break-ve
   `UnknownPragmaError` is raised when an override names a pragma the
   linked SQLite doesn't recognise. `foreign_keys` is not among the
   defaults, since Sequel's SQLite adapter already enables it on every
-  connection; it can still be set as an override.
+  connection; it can still be set as an override. Pass `readonly: true`
+  to drop the defaults that write to the database file (`journal_mode`),
+  for use with read-only connections.
   Requires SQLite 3.30+, where `pragma_list` is available by default.
 
 ### Changed

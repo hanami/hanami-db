@@ -14,6 +14,10 @@ module Hanami
           cache_size: 2_000
         }.freeze
 
+        # Pragmas that write to the database file, which a read-only connection cannot do. Dropped
+        # from the defaults when given `readonly: true`.
+        WRITE_PRAGMAS = %i[journal_mode].freeze
+
         NAMES_MUTEX = Mutex.new
         private_constant :NAMES_MUTEX
 
@@ -38,8 +42,9 @@ module Hanami
           end
         end
 
-        def initialize(overrides: {}, clear_defaults: false)
+        def initialize(overrides: {}, clear_defaults: false, readonly: false)
           base = clear_defaults ? {} : DEFAULTS
+          base = base.except(*WRITE_PRAGMAS) if readonly
           @resolved = base.merge(overrides.transform_keys(&:to_sym)).freeze
           validate_names!
         end
