@@ -65,6 +65,10 @@ RSpec.describe Hanami::DB::DatabaseURL do
     it "is nil for URLs without a scheme" do
       expect(described_class.scheme("db/app.sqlite3")).to be_nil
     end
+
+    it "is nil, rather than the username, for URLs missing their scheme" do
+      expect(described_class.scheme("admin:secret@localhost/app")).to be_nil
+    end
   end
 
   describe ".adapter" do

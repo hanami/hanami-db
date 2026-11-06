@@ -44,8 +44,10 @@ module Hanami
       # "postgresql" but not "postgres".
       JDBC_ADAPTERS = ADAPTERS.slice(*JDBC_GEMS.keys).freeze
 
-      # Matches a URL's scheme, including any JDBC subprotocol, e.g. "jdbc:sqlserver"
-      SCHEME_MATCHER = /\A(?:jdbc:)?[a-z][a-z0-9+.-]*(?=:)/i
+      # Matches a URL's scheme, including any JDBC subprotocol, e.g. "jdbc:sqlserver". Other schemes
+      # must be followed by "://", so that the username in a URL missing its scheme, such as
+      # "admin:secret@localhost/app", is not mistaken for one.
+      SCHEME_MATCHER = %r{\A(?:jdbc:[a-z][a-z0-9+.-]*(?=:)|[a-z][a-z0-9+.-]*(?=://))}i
 
       module_function
 

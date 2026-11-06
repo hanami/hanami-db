@@ -70,7 +70,7 @@ module Hanami
           return url unless DatabaseURL.adapter(url)
 
           DatabaseURL::JDBC_PREFIX + transform(DatabaseURL.uri(url))
-        rescue URI::Error
+        rescue InvalidDatabaseURLError, URI::Error
           url
         end
 
