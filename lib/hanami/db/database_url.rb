@@ -44,6 +44,11 @@ module Hanami
       # "postgresql" but not "postgres".
       JDBC_ADAPTERS = ADAPTERS.slice(*JDBC_GEMS.keys).freeze
 
+      # Matches a URL's scheme, including any JDBC subprotocol, e.g. "jdbc:sqlserver". Other schemes
+      # must be followed by "://", so that the username in a URL missing its scheme, such as
+      # "admin:secret@localhost/app", is not mistaken for one.
+      SCHEME_MATCHER = %r{\A(?:jdbc:[a-z][a-z0-9+.-]*(?=:)|[a-z][a-z0-9+.-]*(?=://))}i
+
       module_function
 
       # Returns true if the URL is a JDBC URL.
@@ -55,15 +60,34 @@ module Hanami
         url.to_s.start_with?(JDBC_PREFIX)
       end
 
+      # Returns the URL's scheme, including any JDBC subprotocol, or nil if it has none.
+      #
+      # Unlike parsing the URL, this cannot fail, and never exposes the credentials the URL may
+      # contain, so it is safe to use in error messages.
+      #
+      # @example
+      #   DatabaseURL.scheme("postgres://user:pass@localhost/app") # => "postgres"
+      #   DatabaseURL.scheme("jdbc:sqlserver://localhost")          # => "jdbc:sqlserver"
+      #
+      # @param url [String, #to_s]
+      #
+      # @return [String, nil]
+      def scheme(url)
+        url.to_s[SCHEME_MATCHER]
+      end
+
       # Returns the URL parsed as a URI, with any JDBC prefix removed.
       #
       # @param url [String, #to_s]
       #
       # @return [URI::Generic]
       #
-      # @raise [URI::InvalidURIError] if the URL cannot be parsed
+      # @raise [InvalidURLError] if the URL cannot be parsed
       def uri(url)
         URI(url.to_s.delete_prefix(JDBC_PREFIX))
+      rescue URI::Error
+        # Without a cause, since the URI error's message includes the URL and its credentials
+        raise InvalidURLError.new(scheme(url)), cause: nil
       end
 
       # Returns the adapter for the URL, or nil if it is not one we support.
@@ -78,7 +102,7 @@ module Hanami
       def adapter(url)
         adapters = jdbc?(url) ? JDBC_ADAPTERS : ADAPTERS
         adapters[uri(url).scheme]
-      rescue URI::Error
+      rescue InvalidURLError
         nil
       end
 
@@ -95,7 +119,7 @@ module Hanami
       def gem_name(url)
         gems = jdbc?(url) ? JDBC_GEMS : NATIVE_GEMS
         gems[uri(url).scheme]
-      rescue URI::Error
+      rescue InvalidURLError
         nil
       end
     end
