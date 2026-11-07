@@ -36,7 +36,8 @@ RSpec.describe Hanami::DB::DatabaseURL do
 
     it "raises an error for URLs that cannot be parsed, without including the URL's credentials" do
       expect { described_class.uri("postgres://user:se cret@localhost/app") }
-        .to raise_error(Hanami::DB::InvalidDatabaseURLError) { |error|
+        .to raise_error(Hanami::DB::InvalidURLError) { |error|
+          expect(error).to be_a Hanami::DB::Error
           expect(error.message).to start_with "`postgres' database URL could not be parsed"
           expect(error.message).not_to include "cret"
           expect(error.cause).to be_nil
@@ -45,7 +46,7 @@ RSpec.describe Hanami::DB::DatabaseURL do
 
     it "includes the JDBC subprotocol in the error for JDBC URLs that cannot be parsed" do
       expect { described_class.uri("jdbc:postgresql://user:se cret@localhost/app") }
-        .to raise_error(Hanami::DB::InvalidDatabaseURLError, /\A`jdbc:postgresql' database URL/)
+        .to raise_error(Hanami::DB::InvalidURLError, /\A`jdbc:postgresql' database URL/)
     end
   end
 

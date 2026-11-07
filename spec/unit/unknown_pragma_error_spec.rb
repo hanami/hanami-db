@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-RSpec.describe Hanami::DB::SQLite::UnknownPragmaError do
+RSpec.describe Hanami::DB::UnknownPragmaError do
   subject { described_class.new(unknown_pragmas) }
 
   let(:unknown_pragmas) { [:frobnicate, :wibble] }
 
-  it "is a StandardError" do
-    expect(subject).to be_a(StandardError)
+  it "is a Hanami::DB::Error" do
+    expect(subject).to be_a(Hanami::DB::Error)
   end
 
   it "lists the unknown pragma names in the message" do
