@@ -24,6 +24,9 @@ and this project adheres to [Break Versioning](https://www.taoensso.com/break-ve
 - `Hanami::DB::InvalidURLError`: raised for database URLs that
   cannot be parsed. Its message includes only the URL's scheme, since the
   URL may contain credentials.
+- `Hanami::DB::UnsupportedSchemeError`: raised by
+  `Hanami::DB::DatabaseURL.adapter!` for database URLs whose scheme is not
+  one hanami-db supports.
 
 ### Changed
 

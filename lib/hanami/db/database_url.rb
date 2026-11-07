@@ -100,10 +100,26 @@ module Hanami
       #
       # @return [Symbol, nil] :sqlite, :postgres or :mysql
       def adapter(url)
-        adapters = jdbc?(url) ? JDBC_ADAPTERS : ADAPTERS
-        adapters[uri(url).scheme]
-      rescue InvalidURLError
+        adapter!(url)
+      rescue InvalidURLError, UnsupportedSchemeError
         nil
+      end
+
+      # Returns the adapter for the URL, raising an error if it is not one we support.
+      #
+      # @example
+      #   DatabaseURL.adapter!("postgresql://localhost/app") # => :postgres
+      #   DatabaseURL.adapter!("oracle://localhost/app")     # raises UnsupportedSchemeError
+      #
+      # @param url [String, #to_s]
+      #
+      # @return [Symbol] :sqlite, :postgres, or :mysql
+      #
+      # @raise [InvalidURLError] if the URL cannot be parsed
+      # @raise [UnsupportedSchemeError] if the URL's scheme is not one we support
+      def adapter!(url)
+        adapters = jdbc?(url) ? JDBC_ADAPTERS : ADAPTERS
+        adapters.fetch(uri(url).scheme) { raise UnsupportedSchemeError.new(scheme(url)) }
       end
 
       # Returns the name of the gem required to connect to the URL, or nil if it is not a scheme
