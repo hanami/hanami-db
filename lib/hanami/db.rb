@@ -7,6 +7,7 @@ require "zeitwerk"
 module Hanami
   module DB
     require_relative "db/gem_inflector"
+    require_relative "db/errors"
 
     # @api private
     # @since 2.2.0
@@ -19,7 +20,8 @@ module Hanami
         loader.push_dir root
         loader.ignore(
           "#{root}/hanami-db.rb",
-          "#{root}/hanami/db/gem_inflector.rb"
+          "#{root}/hanami/db/gem_inflector.rb",
+          "#{root}/hanami/db/errors.rb"
         )
       end
     end

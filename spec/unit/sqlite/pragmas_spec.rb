@@ -95,7 +95,7 @@ RSpec.describe Hanami::DB::SQLite::Pragmas do
 
       it "raises UnknownPragmaError" do
         expect { subject }.to raise_error(
-          Hanami::DB::SQLite::UnknownPragmaError,
+          Hanami::DB::UnknownPragmaError,
           /frobnicate/
         )
       end
@@ -103,7 +103,7 @@ RSpec.describe Hanami::DB::SQLite::Pragmas do
       it "lists every unknown name when multiple are given" do
         multi_args = {overrides: {frobnicate: 1, wibble: 2}}
         expect { described_class.new(**multi_args) }.to raise_error(
-          Hanami::DB::SQLite::UnknownPragmaError
+          Hanami::DB::UnknownPragmaError
         ) { |e| expect(e.unknown).to contain_exactly(:frobnicate, :wibble) }
       end
     end
@@ -121,7 +121,7 @@ RSpec.describe Hanami::DB::SQLite::Pragmas do
 
       it "still raises UnknownPragmaError" do
         expect { subject }.to raise_error(
-          Hanami::DB::SQLite::UnknownPragmaError,
+          Hanami::DB::UnknownPragmaError,
           /frobnicate/
         )
       end

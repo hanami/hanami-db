@@ -13,13 +13,17 @@ and this project adheres to [Break Versioning](https://www.taoensso.com/break-ve
   pragmas with sensible defaults, user overrides, and validation against
   `PRAGMA pragma_list`. Exposes `#connect_sqls`, an array of `PRAGMA`
   statements suitable for Sequel's per-connection `connect_sqls` option.
-  `UnknownPragmaError` is raised when an override names a pragma the
+  `Hanami::DB::UnknownPragmaError` is raised when an override names a pragma the
   linked SQLite doesn't recognise. `foreign_keys` is not among the
   defaults, since Sequel's SQLite adapter already enables it on every
   connection; it can still be set as an override. Pass `readonly: true`
   to drop the defaults that write to the database file (`journal_mode`),
   for use with read-only connections.
   Requires SQLite 3.30+, where `pragma_list` is available by default.
+- `Hanami::DB::Error`: the base class for all hanami-db errors.
+- `Hanami::DB::InvalidURLError`: raised for database URLs that
+  cannot be parsed. Its message includes only the URL's scheme, since the
+  URL may contain credentials.
 
 ### Changed
 

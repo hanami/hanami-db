@@ -33,6 +33,43 @@ RSpec.describe Hanami::DB::DatabaseURL do
 
       expect(uri).to have_attributes(scheme: "sqlite", opaque: "db/app.sqlite3")
     end
+
+    it "raises an error for URLs that cannot be parsed, without including the URL's credentials" do
+      expect { described_class.uri("postgres://user:se cret@localhost/app") }
+        .to raise_error(Hanami::DB::InvalidURLError) { |error|
+          expect(error).to be_a Hanami::DB::Error
+          expect(error.message).to start_with "`postgres' database URL could not be parsed"
+          expect(error.message).not_to include "cret"
+          expect(error.cause).to be_nil
+        }
+    end
+
+    it "includes the JDBC subprotocol in the error for JDBC URLs that cannot be parsed" do
+      expect { described_class.uri("jdbc:postgresql://user:se cret@localhost/app") }
+        .to raise_error(Hanami::DB::InvalidURLError, /\A`jdbc:postgresql' database URL/)
+    end
+  end
+
+  describe ".scheme" do
+    {
+      "postgres://user:secret@localhost/app" => "postgres",
+      "jdbc:postgresql://localhost/app" => "jdbc:postgresql",
+      "jdbc:sqlite:db/app.sqlite3" => "jdbc:sqlite",
+      "jdbc:sqlserver://localhost;user=sa;password=secret" => "jdbc:sqlserver",
+      "postgres://user:se cret@localhost/app" => "postgres"
+    }.each do |url, scheme|
+      it "is #{scheme.inspect} for #{url}" do
+        expect(described_class.scheme(url)).to eq scheme
+      end
+    end
+
+    it "is nil for URLs without a scheme" do
+      expect(described_class.scheme("db/app.sqlite3")).to be_nil
+    end
+
+    it "is nil, rather than the username, for URLs missing their scheme" do
+      expect(described_class.scheme("admin:secret@localhost/app")).to be_nil
+    end
   end
 
   describe ".adapter" do
