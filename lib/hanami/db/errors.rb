@@ -24,6 +24,16 @@ module Hanami
       end
     end
 
+    # Raised when a database URL's scheme is not one hanami-db supports.
+    #
+    # @since 3.1.0
+    # @api public
+    class UnsupportedSchemeError < Error
+      def initialize(scheme)
+        super("`#{scheme || "(none)"}' is not a supported database URL scheme")
+      end
+    end
+
     # Raised when SQLite pragma overrides name pragmas that the linked SQLite does not recognize.
     #
     # @since 3.1.0

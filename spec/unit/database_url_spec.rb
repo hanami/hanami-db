@@ -105,6 +105,31 @@ RSpec.describe Hanami::DB::DatabaseURL do
     end
   end
 
+  describe ".adapter!" do
+    it "returns the adapter for supported URLs" do
+      expect(described_class.adapter!("postgresql://localhost/app")).to eq :postgres
+      expect(described_class.adapter!("jdbc:sqlite:db/app.sqlite3")).to eq :sqlite
+    end
+
+    {
+      "oracle://localhost/app" => "oracle",
+      "jdbc:sqlserver://localhost;databaseName=app" => "jdbc:sqlserver",
+      "jdbc:postgres://localhost/app" => "jdbc:postgres",
+      "db/app.sqlite3" => "(none)"
+    }.each do |url, scheme|
+      it "raises an error naming the scheme for #{url}" do
+        expect { described_class.adapter!(url) }.to raise_error(
+          Hanami::DB::UnsupportedSchemeError, "`#{scheme}' is not a supported database URL scheme"
+        ) { |error| expect(error).to be_a Hanami::DB::Error }
+      end
+    end
+
+    it "raises an error for URLs that cannot be parsed" do
+      expect { described_class.adapter!("postgres://user:se cret@localhost/app") }
+        .to raise_error(Hanami::DB::InvalidURLError)
+    end
+  end
+
   describe ".gem_name" do
     {
       "sqlite://db/app.sqlite3" => "sqlite3",
