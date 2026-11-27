@@ -10,5 +10,5 @@ gemspec:
   homepage: "https://hanamirb.org"
   runtime_dependencies:
     - ["rom", "~> 5.4", ">= 5.4.1"]
-    - ["rom-sql", "~> 3.7"]
+    - ["rom-sql", "~> 3.8"]
     - ["zeitwerk", "~> 2.6"]

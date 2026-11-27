@@ -8,11 +8,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Added
 
-- `Hanami::DB::SQLite::Pragmas`: a value class holding a set of SQLite pragmas with sensible defaults, user overrides, and validation against `PRAGMA pragma_list`. Exposes `#connect_sqls`, an array of `PRAGMA` statements suitable for Sequel's per-connection `connect_sqls` option. `Hanami::DB::UnknownPragmaError` is raised when an override names a pragma the linked SQLite doesn't recognise. `foreign_keys` is not among the defaults, since Sequel's SQLite adapter already enables it on every connection; it can still be set as an override. Pass `readonly: true` to drop the defaults that write to the database file (`journal_mode`), for use with read-only connections. Requires SQLite 3.30+, where `pragma_list` is available by default. (@cllns in #21, @timriley in #28)
-- `Hanami::DB::Error`: the base class for all hanami-db errors. (@parndt in #27)
-- `Hanami::DB::InvalidURLError`: raised for database URLs that cannot be parsed. Its message includes only the URL's scheme, since the URL may contain credentials. (@parndt in #27)
-- `Hanami::DB::UnsupportedSchemeError`: raised by `Hanami::DB::DatabaseURL.adapter!` for database URLs whose scheme is not one hanami-db supports. (@parndt in #29)
-
 ### Changed
 
 ### Deprecated
@@ -21,14 +16,31 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Fixed
 
+### Security
+
+[Unreleased]: https://github.com/hanami/hanami-db/compare/v3.1.0.rc1...main
+
+## [3.1.0.rc1] - 2026-11-27
+
+### Added
+
+- `Hanami::DB::SQLite::Pragmas`: a value class holding a set of SQLite pragmas with sensible defaults, user overrides, and validation against `PRAGMA pragma_list`. Exposes `#connect_sqls`, an array of `PRAGMA` statements suitable for Sequel's per-connection `connect_sqls` option. `Hanami::DB::UnknownPragmaError` is raised when an override names a pragma the linked SQLite doesn't recognise. `foreign_keys` is not among the defaults, since Sequel's SQLite adapter already enables it on every connection; it can still be set as an override. Pass `readonly: true` to drop the defaults that write to the database file (`journal_mode`), for use with read-only connections. Requires SQLite 3.30+, where `pragma_list` is available by default. (@cllns in #21, @timriley in #28)
+- `Hanami::DB::Error`: the base class for all hanami-db errors. (@parndt in #27)
+- `Hanami::DB::InvalidURLError`: raised for database URLs that cannot be parsed. Its message includes only the URL's scheme, since the URL may contain credentials. (@parndt in #27)
+- `Hanami::DB::UnsupportedSchemeError`: raised by `Hanami::DB::DatabaseURL.adapter!` for database URLs whose scheme is not one hanami-db supports. (@parndt in #29)
+
+### Changed
+
+- Require rom-sql 3.8 or later, for plain SQL migrations.
+
+### Fixed
+
 - `Hanami::DB::Testing.database_url` now transforms `jdbc:` database URLs. Previously it returned them unchanged, so with `HANAMI_ENV=test` the test database URL still pointed at the **development** database, and running the test suite truncated or migrated development data. This affected JRuby applications, which are the only ones that must use `jdbc:` URLs. (@afomera in #22)
 
     The `jdbc:postgresql:`, `jdbc:mysql:` and `jdbc:sqlite:` subprotocols are transformed, in both the `jdbc:sqlite://db/app.db` and single-colon `jdbc:sqlite:db/app.db` forms, including SQLite's Windows drive-letter (`jdbc:sqlite:C:/db/app.db`) and `file:` URI filename (`jdbc:sqlite:file:db/app.db?mode=ro`) paths. Other subprotocols — `jdbc:sqlserver:`, `jdbc:h2:`, `jdbc:derby:` and the rest — name their databases in ways this transformation does not understand, and continue to be returned untouched. In-memory SQLite databases (`sqlite::memory:`, `jdbc:sqlite:file::memory:?cache=private`, `jdbc:sqlite:file:app?mode=memory`) are also left alone.
 - `Hanami::DB::Testing.database_url` now transforms the single-colon `sqlite:db/development.sqlite3` form on CRuby too, not only behind a `jdbc:` prefix. Previously it was returned unchanged. (@afomera in #22)
 
-### Security
-
-[Unreleased]: https://github.com/hanami/hanami-db/compare/v3.0.0...main
+[3.1.0.rc1]: https://github.com/hanami/hanami-db/compare/v3.0.0...v3.1.0.rc1
 
 ## [3.0.0] - 2026-06-30
 
